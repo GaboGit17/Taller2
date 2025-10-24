@@ -12,7 +12,6 @@
 
 using namespace std;
 
-
 vector<pair<int, int>> generarCoordenadasUnicas(int N, int filas, int columnas) {
     set<pair<int, int>> usadas;
     vector<pair<int, int>> resultado;
