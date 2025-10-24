@@ -55,9 +55,6 @@ double testget(int cantidadDatos, int filas, int columnas, int repeticiones) {
     return tiempoTotal / repeticiones;
 }
 
-// -------------------------------------------------------------
-// MAIN
-// -------------------------------------------------------------
 int main() {
     srand(time(0));
     int repeticiones = 10;
