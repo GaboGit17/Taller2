@@ -12,7 +12,7 @@
 
 using namespace std;
 
-// Genera N coordenadas únicas dentro de una matriz de filas x columnas
+
 vector<pair<int, int>> generarCoordenadasUnicas(int N, int filas, int columnas) {
     set<pair<int, int>> usadas;
     vector<pair<int, int>> resultado;
@@ -30,21 +30,24 @@ vector<pair<int, int>> generarCoordenadasUnicas(int N, int filas, int columnas) 
     return resultado;
 }
 
-// Mide el tiempo promedio de inserción para N datos en matriz de tamaño filas x columnas
-double testadd(int cantidadDatos, int filas, int columnas, int repeticiones) {
+
+double testget(int cantidadDatos, int filas, int columnas, int repeticiones) {
     double tiempoTotal = 0;
 
     for (int r = 0; r < repeticiones; r++) {
         SparseMatrix matrix;
         vector<pair<int, int>> coordenadas = generarCoordenadasUnicas(cantidadDatos, filas, columnas);
-
-        clock_t inicio = clock();
-
         for (const auto& coord : coordenadas) {
-            int valor = rand() % 100 + 1;  // valor aleatorio entre 1 y 100
+            int valor = rand() % 100 + 1;
             matrix.add(valor, coord.first, coord.second);
         }
 
+        vector<pair<int, int>> coordenadasBusqueda = generarCoordenadasUnicas(cantidadDatos, filas, columnas);
+        clock_t inicio = clock();
+
+        for (const auto& coord : coordenadasBusqueda) {
+            matrix.get(coord.first, coord.second);
+        }
         clock_t fin = clock();
         double duracion = double(fin - inicio) / CLOCKS_PER_SEC;
         tiempoTotal += duracion;
@@ -53,11 +56,11 @@ double testadd(int cantidadDatos, int filas, int columnas, int repeticiones) {
     return tiempoTotal / repeticiones;
 }
 
-
-
+// -------------------------------------------------------------
+// MAIN
+// -------------------------------------------------------------
 int main() {
-    srand(time(0)); // Inicializa semilla aleatoria
-
+    srand(time(0));
     int repeticiones = 10;
     int tamaños[] = {50, 250, 500, 1000, 5000};
 
@@ -66,19 +69,17 @@ int main() {
         int filas1 = N * 2;
         int columnas1 = N * 2;
 
-        double tiempoBajo = testadd(N, filas1, columnas1, repeticiones);
-        cout << "[ADD] N = " << N << " | Densidad < 40% | Tiempo promedio = "
+        double tiempoBajo = testget(N, filas1, columnas1, repeticiones);
+        cout << "[GET] N = " << N << " | Densidad < 40% | Tiempo promedio = "
              << tiempoBajo << " segundos" << endl;
 
         // Caso densidad > 70%
         int lado = int(sqrt(N / 0.75));
-        double tiempoAlto = testadd(N, lado, lado, repeticiones);
-        cout << "[ADD] N = " << N << " | Densidad > 70% | Tiempo promedio = "
+        double tiempoAlto = testget(N, lado, lado, repeticiones);
+        cout << "[GET] N = " << N << " | Densidad > 70% | Tiempo promedio = "
              << tiempoAlto << " segundos" << endl;
-
         cout << "--------------------------------------------------" << endl;
     }
-
     return 0;
 }
 
